@@ -1,0 +1,15 @@
+name: metaproteomics_env
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.9
+  - sphinx
+  - sphinx_rtd_theme
+  - seqkit
+  - mono
+  - matplotlib
+  - pandas
+  - numpy
+  - biopython
+  # Add other packages as needed
