@@ -18,9 +18,9 @@ Start an interactive session to allocate the necessary resources:
 Activate the provided conda environment that contains all necessary tools:
 
 .. code-block:: bash
+
     course_path="/mnt/aiongpfs/projects/prospectomics_autumn_course"
     env_path="${course_path}/data/mp_practical/env/metaproteomics_env"
-
 
     # Load conda module
     module load lang/Anaconda3/2020.11
@@ -37,6 +37,7 @@ Copy Data to the node's Shared Memory
 For improved performance, copy data to the node's shared memory directory:
 
 .. code-block:: bash
+
     # Define paths
     course_data_path="${course_path}/data/mp_practical"
     databases_path="${course_data_path}/databases"
