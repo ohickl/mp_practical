@@ -14,14 +14,14 @@ Task 1: Convert Thermo `.raw` File to `.ms2` Format
 .. code-block:: bash
 
     # Path to the shared memory directory
-    node_memory_path="/dev/shm"
+    session_path="/dev/shm"
 
     # Move to the shared memory directory
-    cd "${node_memory_path}/mp_practical"
+    cd "${session_path}/mp_practical"
 
     # Activate the provided conda environment
     course_path="/mnt/aiongpfs/projects/prospectomics_autumn_course"
-    env_path="${course_path}/data/mp_practical/env/metaproteomics_env"
+    env_path="${course_path}/envs/metaproteomics_env"
 
     # Load conda module
     module load lang/Anaconda3/2020.11
@@ -39,13 +39,13 @@ Use the help command to understand how to use the tool:
 .. code-block:: bash
 
     # Path tou ouput directory
-    mgf_path="${node_memory_path}/mp_practical/mgf"
+    mgf_path="${session_path}/mp_practical/mgf"
 
     # Ensure the output directory exists
     mkdir -p "${mgf_path}"
     
     # Run the help command
-    ThermoRawFileParser --help
+    ThermoRawFileParser --help | less -RS
 
 **Step 3: Convert the Raw File**
 
@@ -53,13 +53,14 @@ Use the appropriate command-line options to convert `raw_file.raw` to `raw_file.
 
 .. hint::
     Look for options that specify input (`-i`), output (`-o`), and format (`-f`).
+
     Use e.g. `tree` to check the contents of your directory to see where files are located.
 
     .. toggle::
 
         .. code-block:: bash
 
-            ThermoRawFileParser -i="${raw_data_path}/M11-01_V2/E4.raw" -o="${mgf_path}" -f=0 -m=0
+            ThermoRawFileParser -i="${raw_data_path}/M11-01_V2/E4.raw" -o="${mgf_path}" -f=0 -m=0 --msLevel=2
 
 Questions
 ---------
@@ -138,10 +139,22 @@ Use the provided script to convert the `mgf` file to `ms2` format.
 .. code-block:: bash
 
     # Path to the conversion script
-    conversion_script_path="${course_path}/scripts/mgf_to_ms2_converter.sh"
+    conversion_script_path="${course_path}/scripts/mp_practical/convert_mgf_to_ms2.py"
+    ms2_path="${session_path}/mp_practical/ms2"
 
-    # Run the conversion script
-    bash "${conversion_script_path}" "${mgf_path}/E4.mgf" "${ms2_path}/E4.ms2"
+    # Ensure the output directory exists
+    mkdir -p "${ms2_path}"
+
+    # Check the conversion scripts help
+    python3 "${conversion_script_path}" --help
+
+.. hint::
+
+    .. toggle::
+
+        .. code-block:: bash
+        
+        python3 "${conversion_script_path}" "${mgf_path}/E4.mgf" -o "${ms2_path}/E4.ms2"
 
 - **Q8**: What command did you use to convert the MGF file to MS2 format?
 - **Q9**: What differences do you observe between the MGF and MS2 files?
@@ -157,3 +170,32 @@ Compare the contents of the MGF and MS2 files to understand the differences.
 
 - **Q10**: What information is present in the MS2 file that is not in the MGF file?
 - **Q11**: Why might different formats be useful for different types of analysis?
+
+**Step 7: Convert MGF File to mzML Format**
+
+Try to convert the raw file to mzML format:
+
+.. hint::
+    .. toggle::
+        
+        .. code-block:: bash
+
+            # Path to the mzML output directory
+            mzml_path="${session_path}/mp_practical/mzml"
+
+            # Ensure the output directory exists
+            mkdir -p "${mzml_path}"
+
+            # Convert the raw file to mzML format
+            ThermoRawFileParser -i="${raw_data_path}/M11-01_V2/E4.raw" -o="${mzml_path}" -f=1 -m=0
+
+            # Inspect the mzML file
+            less "${mzml_path}/E4.mzML"
+
+Questions
+---------
+
+- **Q12**: What information about the spectra is present in the mzML file?
+- **Q13**: How does the mzML file compare to the MGF and MS2 files in terms of information content?
+- **Q14**: What information is present in the mzML file that is not in the MGF or MS2 files?
+- **Q15**: Why might different formats be useful for different types of analysis?
