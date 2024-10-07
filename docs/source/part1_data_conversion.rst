@@ -38,6 +38,13 @@ Use the help command to understand how to use the tool:
 
 .. code-block:: bash
 
+    # Path tou ouput directory
+    mgf_path="${node_memory_path}/mp_practical/mgf"
+
+    # Ensure the output directory exists
+    mkdir -p "${mgf_path}"
+    
+    # Run the help command
     ThermoRawFileParser --help
 
 **Step 3: Convert the Raw File**
@@ -46,12 +53,13 @@ Use the appropriate command-line options to convert `raw_file.raw` to `raw_file.
 
 .. hint::
     Look for options that specify input (`-i`), output (`-o`), and format (`-f`).
+    Use e.g. `tree` to check the contents of your directory to see where files are located.
 
     .. toggle::
-        
+
         .. code-block:: bash
 
-            ThermoRawFileParser -i="${raw_data_path}/M11-01_V2/E4.raw" -o="${mgf_path}" -f=0 -g -m=0
+            ThermoRawFileParser -i="${raw_data_path}/M11-01_V2/E4.raw" -o="${mgf_path}" -f=0 -m=0
 
 Questions
 ---------
@@ -110,6 +118,18 @@ Questions
 
 - **Q5**: How many spectra did you find in the MGF file?
 - **Q6**: What charge states are present in the MGF file?
+- **Q6**: What is the most abundant charge state?
+
+.. hint::
+    .. toggle::
+        Look for lines starting with `CHARGE` and list unique values.
+
+        .. code-block:: bash
+
+            for charge in $(grep "^CHARGE" "${mgf_path}/E4.mgf" | sort | uniq); do
+                printf "${charge}: "
+                grep -c "${charge}" "${mgf_path}/E4.mgf"
+            done | sort -k2 -nr
 
 **Step 5: Convert MGF File to MS2 Format**
 
@@ -123,8 +143,8 @@ Use the provided script to convert the `mgf` file to `ms2` format.
     # Run the conversion script
     bash "${conversion_script_path}" "${mgf_path}/E4.mgf" "${ms2_path}/E4.ms2"
 
-- **Q7**: What command did you use to convert the MGF file to MS2 format?
-- **Q8**: What differences do you observe between the MGF and MS2 files?
+- **Q8**: What command did you use to convert the MGF file to MS2 format?
+- **Q9**: What differences do you observe between the MGF and MS2 files?
 
 **Step 6: Compare MGF and MS2 Files**
 
@@ -135,5 +155,5 @@ Compare the contents of the MGF and MS2 files to understand the differences.
     # View the MS2 file
     less "${ms2_path}/E4.ms2"
 
-- **Q9**: What information is present in the MS2 file that is not in the MGF file?
-- **Q10**: Why might different formats be useful for different types of analysis?
+- **Q10**: What information is present in the MS2 file that is not in the MGF file?
+- **Q11**: Why might different formats be useful for different types of analysis?

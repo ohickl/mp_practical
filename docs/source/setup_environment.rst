@@ -20,7 +20,7 @@ Activate the provided conda environment that contains all necessary tools:
 .. code-block:: bash
 
     course_path="/mnt/aiongpfs/projects/prospectomics_autumn_course"
-    env_path="${course_path}/data/mp_practical/env/metaproteomics_env"
+    env_path="${course_path}/envs/metaproteomics_env"
 
     # Load conda module
     module load lang/Anaconda3/2020.11
