@@ -48,10 +48,10 @@ Use the appropriate command-line options to convert `raw_file.raw` to `raw_file.
     Look for options that specify input (`-i`), output (`-o`), and format (`-f`).
 
     .. toggle::
+        
         .. code-block:: bash
 
             ThermoRawFileParser -i="${raw_data_path}/M11-01_V2/E4.raw" -o="${mgf_path}" -f=0 -g -m=0
-
 
 Questions
 ---------
