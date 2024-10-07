@@ -34,17 +34,19 @@ List all files in the `sipros_output` directory:
    
    You should see the following files:
 
-   .. code-block:: text
+   .. toggle::
 
-      .
-      ├── converge.cfg
-      ├── E4.sample1.pep.txt
-      ├── E4.sample1.pro2pep.txt
-      ├── E4.sample1.pro2psm.txt
-      ├── E4.sample1.pro.txt
-      ├── E4.sample1.psm.txt
-      ├── E4.sample1.Spe2Pep.txt
-      └── E4.sample1.tab
+      .. code-block:: text
+
+         .
+         ├── converge.cfg
+         ├── E4.sample1.pep.txt
+         ├── E4.sample1.pro2pep.txt
+         ├── E4.sample1.pro2psm.txt
+         ├── E4.sample1.pro.txt
+         ├── E4.sample1.psm.txt
+         ├── E4.sample1.Spe2Pep.txt
+         └── E4.sample1.tab
 
 **Questions**
 
