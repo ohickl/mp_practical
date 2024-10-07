@@ -6,89 +6,118 @@ Overview
 
 Peptide-spectrum matching is performed using search engines that compare observed spectra with theoretical spectra derived from protein databases. In this part, you will configure and run the Sipros search engine.
 
-Task 3: Configure and Run the Sipros Search Engine
+Task 1: Set Up the Sipros Configuration File
 --------------------------------------------------
 
-**Note:** The conda environment is already set up on the cluster, and you have access to all required tools and paths.
+**Step 1: Inspect the Sipros configuration file**
 
-**Step 1: Set Up Environment Variables and Paths**
+Open your Sipros configuration file and inspect the parameters. Ensure that the paths to the protein database and other necessary files are correctly set.
 
-Ensure that the environment variables and paths from Part 2 are set. If you have not closed your terminal session since Part 2, these variables should still be available.
+.. hint::
+
+   .. toggle::
+
+      Open and inspect the configuration file using a text editor. 
+      Example using nano:
+      `nano "${config_temp}"`
+      Example using vim:
+      `vim "${config_temp}"`
+
+- **Q1:** What parameters are available in the Sipros configuration file?
+- **Q2:** Which parameters do you think will have the most significant impact on the search results?
+- **Q3:** Which parameters will have the most significant impact on the search speed?
+- **Q4:** Why are some possible parameters not set by default?
+
+Task 2: Prepare paths and files for search
+
+**Step 1: Set Paths**
 
 .. code-block:: bash
 
-   # If necessary, set the sample name and paths again
-   SAMPLE="sample1"  # Replace 'sample1' with your sample name
+   # Paths to Sipros funtionalities
+   sip_src="${sip_dir}/Scripts"
+   sip_main="${sip_dir}/ReleaseOpenMP"
 
-   proj_dir="/dev/shm/metap_practical"
-   script_dir="${proj_dir}/scripts"
-   cfg_dir="${proj_dir}/cfg"
-   config="${cfg_dir}/se_${SAMPLE}.cfg"
+   # Make Sipros functionalities available in the PATH
+   export PATH="${sip_src}:${sip_main}:$PATH"
 
-   ms_data="${proj_dir}/data/ms2/${SAMPLE}"
-   out_dir="${proj_dir}/output/${SAMPLE}_acetyl_ptm"
+   # We already prepares the config path in a previous task: ${config_temp}
+   # We already prepared the ms2 data path in a previous task: ${ms2_path}
 
-**Step 2: Create Output Directory**
+   # Path to the output directory
+   out_dir="${session_path}/mp_practical/sipros_output"
 
-Create the output directory where the search results will be stored.
-
-.. code-block:: bash
-
+   # Ensure the output directory exists
    mkdir -p "${out_dir}"
 
-**Step 3: Run Sipros Search**
+Task 2: Run Sipros Search
+
+**Step 1: Check the Sipros command**
+
+Inspect the Sipros command to ensure that the paths to the MS data, configuration file, and output directory are correctly set.
+
+.. code-block:: bash
+
+   Sipros_OpenMP -h
+
+.. hint::
+
+   Even though we just have a single filem, we need to input the directory containing the MS data files to avoid errors.
+
+**Step 2: Run the search**
 
 Execute the Sipros search for your sample.
 
-.. code-block:: bash
+.. hint::
 
-   echo "Running Sipros search for sample: ${SAMPLE}"
-   Sipros_OpenMP -w "${ms_data}" \
-                 -c "${config}" \
-                 -o "${out_dir}" > "${out_dir}/sipros_search.log" 2>&1
+   .. toggle::
 
-**Notes:**
+      .. code-block:: bash
 
-- The `-w` option specifies the directory containing the MS data files (`.ms2` files).
-- The `-c` option specifies the configuration file.
-- The `-o` option specifies the output directory.
+         Sipros_OpenMP -w "${ms2_path}" \
+                       -c "${config_temp}" \
+                       -o "${out_dir}"
+
+**Step 3: Inspect the Sipros Output File**
+
+Check the output directory to ensure that the Sipros search generated the expected files.
+
+.. hint::
+
+   .. toggle::
+
+      .. code-block:: bash
+
+         sipros_out_file=$(ls "${session_path}/mp_practical/sipros_output"/*)
+
+         less -RS "${sipros_out_file}"
+
+- **Q5:** What information does the output of the Sipros search contain?
+- **Q6:** What information is missing?
 
 **Step 4: Process Search Results**
 
-Process the search results to generate peptide XML files and apply initial filtering.
+Process the search results to generate PSM, Peptide and Protein files.
+
+Check the help command of provided Python script to process the search results.
 
 .. code-block:: bash
 
-   echo "Processing Sipros search results for sample: ${SAMPLE}"
-   runSiprosFiltering_make_pepxml.sh -in "${out_dir}" \
-                                     -o "${out_dir}" \
-                                     -c "${config}" > "${out_dir}/sipros_filter.log" 2>&1
+   # Path to the script directory
+   script_dir="${course_dir}/scripts/mp_practical"
 
-**Notes:**
-
-- The `runSiprosFiltering_make_pepxml.sh` script processes the Sipros output and generates `.pepxml` files for downstream analysis.
-- Ensure that this script is accessible in your `PATH` or provide the full path to it.
-
-**Step 5: Converge to 1% Protein FDR**
+   # Check the help command
+   "${py3}" "${script_dir}/converge_to_protein_decoy_fdr.py" -h
 
 Use the provided Python script to adjust the FDR threshold and converge to a 1% protein FDR.
 
-.. code-block:: bash
+.. hint::
 
-   echo "Converging to 1% protein FDR for sample: ${SAMPLE}"
-   "${py3}" "${script_dir}/converge_to_protein_decoy_fdr.py" "${out_dir}" "${sip_src}" "${config}" 1.0 >> "${out_dir}/sipros_filter_converge.log" 2>&1
+   .. toggle::
 
-**Notes:**
+      .. code-block:: bash
 
-- The `converge_to_protein_decoy_fdr.py` script iteratively adjusts the filtering thresholds to achieve the desired protein-level FDR.
-- The `1.0` at the end specifies the target FDR percentage (1%).
+         "${py3}" "${script_dir}/converge_to_protein_decoy_fdr.py" "${out_dir}" "${sip_src}" "${config_temp}" 1.0
 
-Questions
----------
-
-- **Q1:** What does the Sipros search engine do with the MS data and the protein database?
-- **Q2:** Why is it necessary to process the search results before interpreting them?
-- **Q3:** How does adjusting the FDR threshold affect your search results?
-
----
-
+- **Q6:** What was the final protein FDR?
+- **Q7:** Why did we arrive at this threshold?

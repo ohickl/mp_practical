@@ -6,8 +6,8 @@ Overview
 
 Creating an appropriate protein database is crucial for peptide identification. In metaproteomics, databases can be derived from metagenomic data, public repositories, or a combination of both. In this part, you will prepare the databases for the search, including generating decoy sequences.
 
-Task 2: Build and Prepare Protein Databases
--------------------------------------------
+Task 1: Prepare and Inspect Protein Databases
+---------------------------------------------
 
 **Note:** All required tools and paths are provided. You do not need to create a conda environment; the environment is already set up on the cluster. You will use the provided paths to access Sipros and other necessary tools.
 
@@ -19,22 +19,22 @@ Set up the necessary environment variables and paths. Replace `/path/to` with th
 
    ### Set the needed paths
    course_dir="/mnt/aiongpfs/projects/prospectomics_autumn_course"
-   script_dir="${course_dir}/scripts"
 
+   # Path to Sipro-Ensemble
    sip_dir="${course_dir}/tools/Sipros-Ensemble"
+
+   # Paths to Sipros funtionalities
+   sip_src="${sip_dir}/Scripts"
+   sip_main="${sip_dir}/ReleaseOpenMP"
 
    template_dir="${sip_dir}/templates"
    config_template="${template_dir}/se_template.cfg"
-
-   sip_src="${sip_dir}/Scripts"
-   sip_main="${sip_dir}/ReleaseOpenMP"
-   export PATH="${sip_src}:${sip_main}:$PATH"
 
    ### Set the Python executables
    # The conda environment's Python 2 is used for Sipros
    py2="${CONDA_PREFIX}/bin/python2.7"
    # The cluster's general Python 3 is used for other scripts
-   py3="/usr/bin/python3"
+   py3="/mnt/aiongpfs/projects/prospectomics_autumn_course/envs/python310/bin/python3"
 
    ### Set a sample name
    SAMPLE="sample1"
@@ -59,10 +59,10 @@ Set up the necessary environment variables and paths. Replace `/path/to` with th
 .. code-block:: bash
 
    # Check the contents of the database directory
-   ls -lSh "${databases_path}"
+   ls -lSh "${db_dir}"
 
    # Inspect a database
-   less -RS "${databases_path}/db_01.faa"
+   less -RS "${db_dir}/db_01.fasta"
 
    # Use seqkit to get statistics on the database(s)
    seqkit -h
@@ -75,7 +75,7 @@ Set up the necessary environment variables and paths. Replace `/path/to` with th
         .. code-block:: bash
 
              # Get statistics on the database
-             seqkit stats -j 32 "${databases_path}"/*
+             seqkit stats -j 32 "${db_dir}"/*
 
 Questions
 ---------
@@ -83,7 +83,10 @@ Questions
 - **Q1:** How is the information in the database organized?
 - **Q2:** How do the different databases differ in size and content?
 
-**Step 3: Create Sipros Database with Decoy Sequences**
+Task 2: Create Sipros Database with Decoy Sequences
+---------------------------------------------------
+
+**Step 1: Prepare the config and input files**
 
 Inspect the config file and update the database path.
 
@@ -94,10 +97,7 @@ Inspect the config file and update the database path.
    db_raw="${db_dir}/<CHOOSE_A_DATABSE_HERE>"
 
    # Path to the Sipros database
-   db="${db_raw%.faa}_sipros_rev.faa"
-
-   # Create the sessions database directory if it doesn't exist
-   mkdir -p "${db_dir}"
+   db="${db_raw%.fasta}_sipros_rev.fasta"
 
    # Modify the config file to include the database path
    # Example using nano:
@@ -118,9 +118,28 @@ Inspect the config file and update the database path.
 
         .. code-block:: bash
 
-             sed -i -e "s|__DB__|${db_raw}|g" e "s|__SEARCH_NAME__|${SAMPLE}|g" "${config_temp}"
+             sed -i -e "s|__DB__|${db_raw}|g" -e "s|__SEARCH_NAME__|${SAMPLE}|g" "${config_temp}"
 
-Generate the Sipros database with decoy sequences. This step is essential for estimating the False Discovery Rate (FDR) during the search.
+**Step 2: Add the potential contaminants to the database (only needed for db_01.fasta)**
+
+Add the contaminants to the database.
+
+..hint::
+
+    Use the cat command to append the contaminants to the database:
+
+      .. toggle::
+   
+         .. code-block:: bash
+   
+               cat "${db_dir}/contaminants.fastaa" >> "${db_raw}"
+
+- **Q3:** Inspection the contaminants file. What type of sequences are included in the contaminants file?
+- **Q4:** Why is it important to include contaminants in the database?
+
+**Step 3: Generate the Sipros database with decoy sequences.**
+
+Use the `sipros_prepare_protein_database.py` script to generate the Sipros database with decoy sequences.
 
 .. code-block:: bash
 
@@ -135,10 +154,12 @@ Generate the Sipros database with decoy sequences. This step is essential for es
 
         .. code-block:: bash
 
-         "{py2}" "${sip_src}/sipros_prepare_protein_database.py" -i "${db_raw}" \
-                                                                 -o "${db}" \
-                                                                 -c "${config_temp}" 
+         "${py2}" "${sip_src}/sipros_prepare_protein_database.py" -i "${db_raw}" \
+                                                                  -o "${db}" \
+                                                                  -c "${config_temp}" 
 
+
+**Step 4: Postprocess database and update the config file**
 
 Replace commas in the FASTA headers with semicolons to avoid issues during the search and update the config file with the new database path.
 
@@ -162,12 +183,13 @@ Replace commas in the FASTA headers with semicolons to avoid issues during the s
 
              sed -i -e "s|${db_raw}|${db}|g" "${config_temp}"
 
-Questions
----------
 
-- **Q3:** Why is it important to generate decoy sequences in the database?
-- **Q4:** Inspect the new database file. What changes do you observe?
+Task 3: Inspect the New Database
+-------------------------------
 
+**Step 1: Inspect the new database**
+
+Try to inspect the new database file.
 
 .. hint::
 
@@ -178,6 +200,12 @@ Questions
       .. code-block:: bash
 
            seqkit stats "${db}"
+
+Questions
+---------
+
+- **Q5:** Why is it important to generate decoy sequences in the database?
+- **Q6:** Inspect the new database file. What changes do you observe?
 
 **Notes:**
 

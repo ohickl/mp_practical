@@ -132,7 +132,11 @@ Questions
                 grep -c "${charge}" "${mgf_path}/E4.mgf"
             done | sort -k2 -nr
 
-**Step 5: Convert MGF File to MS2 Format**
+
+Task 3: Convert MGF File to MS2 Format
+--------------------------------------
+
+**Step 1: Convert MGF File to MS2 Format**
 
 Use the provided script to convert the `mgf` file to `ms2` format.
 
@@ -159,7 +163,8 @@ Use the provided script to convert the `mgf` file to `ms2` format.
 - **Q8**: What command did you use to convert the MGF file to MS2 format?
 - **Q9**: What differences do you observe between the MGF and MS2 files?
 
-**Step 6: Compare MGF and MS2 Files**
+Task 3: Compare MGF and MS2 Files
+---------------------------------
 
 Compare the contents of the MGF and MS2 files to understand the differences.
 
@@ -171,7 +176,7 @@ Compare the contents of the MGF and MS2 files to understand the differences.
 - **Q10**: What information is present in the MS2 file that is not in the MGF file?
 - **Q11**: Why might different formats be useful for different types of analysis?
 
-**Step 7: Convert MGF File to mzML Format**
+Task 4: Convert MGF File to mzML Format (Optional)
 
 Try to convert the raw file to mzML format:
 
@@ -199,3 +204,7 @@ Questions
 - **Q13**: How does the mzML file compare to the MGF and MS2 files in terms of information content?
 - **Q14**: What information is present in the mzML file that is not in the MGF or MS2 files?
 - **Q15**: Why might different formats be useful for different types of analysis?
+
+**Notes:**
+ - The `ThermoRawFileParser` tool is used to convert Thermo `.raw` files to open formats like `mzML`, `MGF`, or `MS2`.
+ - Different kinds of MS data can be extracted and in different shapes from the same raw file.

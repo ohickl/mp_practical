@@ -1,19 +1,20 @@
-Setting Up the Environment
+Setting Up the Session
 ==========================
 
 Before we begin, let's set up our working environment.
 
-Activate the Conda Environment
---------------------------------
-
-Start a SLURM Interactive Session (If Applicable)
--------------------------------------------------
+Task 1: Start a SLURM Interactive Session (If Applicable)
+----------------------------------------------------------
 
 Start an interactive session to allocate the necessary resources:
 
 .. code-block:: bash
 
     si -c 32 -t 120  # Allocates 32 cores for 120 minutes
+
+
+Task 2: Activate the Conda Environment
+---------------------------------------
 
 Activate the provided conda environment that contains all necessary tools:
 
@@ -31,8 +32,8 @@ Activate the provided conda environment that contains all necessary tools:
 
     conda activate "${env_path}"
 
-Copy Data to the node's Shared Memory
-------------------------------------------------
+Task 3: Copy Data to the node's Shared Memory
+---------------------------------------------
 
 For improved performance, copy data to the node's shared memory directory:
 
@@ -42,13 +43,13 @@ For improved performance, copy data to the node's shared memory directory:
     course_data_path="${course_path}/data/mp_practical"
     databases_path="${course_data_path}/databases"
     raw_data_path="${course_data_path}/ms_raw_data"
-    node_memory_path="/dev/shm"
+    session_path="/dev/shm"
 
     # Make a directory for the course data
-    mkdir -p "${node_memory_path}/mp_practical"
+    mkdir -p "${session_path}/mp_practical"
 
     # Move to the shared memory directory
-    cd "${node_memory_path}/mp_practical"
+    cd "${session_path}/mp_practical"
 
     # Copy the data to the shared memory directory
     rsync -avP "${databases_path}" .
@@ -56,3 +57,7 @@ For improved performance, copy data to the node's shared memory directory:
 
     # Check the contents of the shared memory directory
     tree
+
+.. hint::
+
+    Check the section `General Tips` for basic Linux commands.
