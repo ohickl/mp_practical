@@ -45,7 +45,7 @@ Use the appropriate command-line options to convert `raw_file.raw` to `raw_file.
 
 *Hint*: Look for options that specify input (`-i`), output (`-o`), and format (`-f`).
 
-.. hint::
+.. toggle:: Show Hint
     .. code-block:: bash
 
         ThermoRawFileParser -i="${raw_data_path}/M11-01_V2/E4.raw" -o="${mgf_path}" -f=0 -g -m=0
@@ -82,7 +82,7 @@ Use a text viewer like `less` or `cat` to open and explore the contents of the M
 
 Count the number of spectra in the MGF file.
 
-.. hint::
+.. toggle:: Show Hint
     Look for lines starting with `TITLE` and count them.
 
     .. code-block:: bash
@@ -93,7 +93,7 @@ Count the number of spectra in the MGF file.
 
 Identify the different charge states present in the MGF file.
 
-.. hint::
+.. toggle:: Show Hint
     Look for lines starting with `CHARGE` and list unique values.
 
     .. code-block:: bash
