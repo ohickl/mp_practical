@@ -4,35 +4,54 @@ Setting Up the Environment
 Before we begin, let's set up our working environment.
 
 Activate the Conda Environment
-------------------------------
-
-First, create the environment from the `environment.yml` file:
-
-.. code-block:: bash
-
-    conda env create -f environment.yml
-
-Then, activate the provided conda environment that contains all necessary tools:
-
-.. code-block:: bash
-
-    conda activate metaproteomics_env
+--------------------------------
 
 Start a SLURM Interactive Session (If Applicable)
 -------------------------------------------------
 
-If you're working on a cluster with the SLURM workload manager, start an interactive session:
+Start an interactive session to allocate the necessary resources:
 
 .. code-block:: bash
 
     si -c 32 -t 120  # Allocates 32 cores for 120 minutes
 
-Copy Data to Shared Memory for Faster Processing
-------------------------------------------------
-
-For improved performance, copy your data to the shared memory directory:
+Activate the provided conda environment that contains all necessary tools:
 
 .. code-block:: bash
+    course_path="/mnt/aiongpfs/projects/prospectomics_autumn_course"
+    env_path="${course_path}/data/mp_practical/env/metaproteomics_env"
 
-    cp -r data /dev/shm/metap_practical
-    cd /dev/shm/metap_practical
+
+    # Load conda module
+    module load lang/Anaconda3/2020.11
+
+    # Ensure conda is properly initialized
+    conda init bash
+    source ~/.bashrc
+
+    conda activate "${env_path}"
+
+Copy Data to the node's Shared Memory
+------------------------------------------------
+
+For improved performance, copy data to the node's shared memory directory:
+
+.. code-block:: bash
+    # Define paths
+    course_data_path="${course_path}/data/mp_practical"
+    databases_path="${course_data_path}/databases"
+    raw_data_path="${course_data_path}/ms_raw_data"
+    node_memory_path="/dev/shm"
+
+    # Make a directory for the course data
+    mkdir -p "${node_memory_path}/mp_practical"
+
+    # Move to the shared memory directory
+    cd "${node_memory_path}/mp_practical"
+
+    # Copy the data to the shared memory directory
+    rsync -avP "${databases_path}" .
+    rsync -avP "${raw_data_path}" .
+
+    # Check the contents of the shared memory directory
+    tree
