@@ -43,7 +43,8 @@ Use the help command to understand how to use the tool:
 
 Use the appropriate command-line options to convert `raw_file.raw` to `raw_file.mgf`.
 
-*Hint*: Look for options that specify input (`-i`), output (`-o`), and format (`-f`).
+.. hint::
+    Look for options that specify input (`-i`), output (`-o`), and format (`-f`).
 
 .. toggle:: Show Hint
     .. code-block:: bash
