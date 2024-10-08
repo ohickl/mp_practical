@@ -157,8 +157,8 @@ Use the provided script to convert the `mgf` file to `ms2` format.
     .. toggle::
 
         .. code-block:: bash
-        
-        python3 "${conversion_script_path}" "${mgf_path}/E4.mgf" -o "${ms2_path}/E4.ms2"
+            
+            python3 "${conversion_script_path}" "${mgf_path}/E4.mgf" -o "${ms2_path}/E4.ms2"
 
 - **Q8**: What command did you use to convert the MGF file to MS2 format?
 - **Q9**: What differences do you observe between the MGF and MS2 files?
