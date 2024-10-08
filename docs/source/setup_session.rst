@@ -3,7 +3,7 @@ Setting Up the Session
 
 Before we begin, let's set up our working environment.
 
-Task 1: Start a SLURM Interactive Session (If Applicable)
+Task 1: Start a SLURM Interactive Session
 ----------------------------------------------------------
 
 Start an interactive session to allocate the necessary resources:

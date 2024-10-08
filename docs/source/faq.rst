@@ -18,7 +18,3 @@ A: Lowering the FDR threshold (e.g., from 5% to 1%) makes the identification cri
 A: Converting the raw file to an open format like `.ms2` allows compatibility with various bioinformatics tools and ensures that the data can be processed on different platforms.
 
 ---
-
-**Q: How can I visualize the size distribution of the protein databases if the `hist` command is not available?**
-
-A: You can redirect the length data to a file and use plotting tools like `gnuplot`, or use Python libraries such as `matplotlib` and `seaborn` to create histograms.
