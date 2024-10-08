@@ -124,15 +124,15 @@ Inspect the config file and update the database path.
 
 Add the contaminants to the database.
 
-..hint::
+.. hint::
 
     Use the cat command to append the contaminants to the database:
 
-      .. toggle::
+    .. toggle::
    
-         .. code-block:: bash
+        .. code-block:: bash
    
-               cat "${db_dir}/contaminants.fastaa" >> "${db_raw}"
+            cat "${db_dir}/contaminants.fastaa" >> "${db_raw}"
 
 - **Q3:** Inspection the contaminants file. What type of sequences are included in the contaminants file?
 - **Q4:** Why is it important to include contaminants in the database?
