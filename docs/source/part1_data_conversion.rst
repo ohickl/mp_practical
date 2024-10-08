@@ -45,7 +45,7 @@ Use the help command to understand how to use the tool:
     mkdir -p "${mgf_path}"
     
     # Run the help command
-    ThermoRawFileParser --help | less -RS
+    ThermoRawFileParser --help
 
 **Step 3: Convert the Raw File**
 
